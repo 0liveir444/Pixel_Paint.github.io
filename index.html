@@ -1,56 +1,54 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <title>Pixel Paint</title>
-    <style>
-        body {
-            background: #222;
-            color: white;
-            text-align: center;
-            font-family: Arial;
-        }
-        #grid {
-            display: grid;
-            grid-template-columns: repeat(32, 20px);
-            gap: 1px;
-            margin: 20px auto;
-            width: fit-content;
-        }
-        .pixel {
-            width: 20px;
-            height: 20px;
-            background: #444;
-            cursor: pointer;
-        }
-        #colorPicker {
-            margin: 20px;
-        }
-    </style>
-</head>
-<body>
+import React, { useState, useRef, useEffect } from "react";
 
-    <h1>🎨 Pixel Paint</h1>
-    <input type="color" id="colorPicker" value="#ff0000">
+export default function PixelPainter() {
+  const gridSize = 32; // 32x32 pixels
+  const pixelSize = 16; // tamanho visual de cada pixel
+  const [color, setColor] = useState("#000000");
+  const [pixels, setPixels] = useState(
+    Array(gridSize * gridSize).fill("#ffffff")
+  );
 
-    <div id="grid"></div>
+  const handlePaint = (index) => {
+    const newPixels = [...pixels];
+    newPixels[index] = color;
+    setPixels(newPixels);
+  };
 
-    <script>
-        const grid = document.getElementById("grid");
-        const colorPicker = document.getElementById("colorPicker");
+  return (
+    <div className="min-h-screen bg-gray-900 flex flex-col items-center justify-center p-6 text-white">
+      <h1 className="text-3xl font-bold mb-4">Pixel Painter</h1>
 
-        // Criar 32x32 pixels = 1024 pixels
-        for (let i = 0; i < 1024; i++) {
-            const pixel = document.createElement("div");
-            pixel.classList.add("pixel");
+      <div className="mb-4">
+        <input
+          type="color"
+          value={color}
+          onChange={(e) => setColor(e.target.value)}
+          className="w-16 h-16 p-0 border-none rounded"
+        />
+      </div>
 
-            pixel.addEventListener("mousedown", () => {
-                pixel.style.background = colorPicker.value;
-            });
-
-            grid.appendChild(pixel);
-        }
-    </script>
-
-</body>
-</html>
+      <div
+        className="grid"
+        style={{
+          gridTemplateColumns: repeat(${gridSize}, ${pixelSize}px),
+        }}
+      >
+        {pixels.map((pixelColor, index) => (
+          <div
+            key={index}
+            onMouseDown={() => handlePaint(index)}
+            onMouseMove={(e) => {
+              if (e.buttons === 1) handlePaint(index);
+            }}
+            style={{
+              width: pixelSize,
+              height: pixelSize,
+              backgroundColor: pixelColor,
+              border: "1px solid #333",
+            }}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
