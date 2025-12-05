@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Pixel Paint</title>
+    <style>
+        body {
+            background: #222;
+            color: white;
+            text-align: center;
+            font-family: Arial;
+        }
+        #grid {
+            display: grid;
+            grid-template-columns: repeat(32, 20px);
+            gap: 1px;
+            margin: 20px auto;
+            width: fit-content;
+        }
+        .pixel {
+            width: 20px;
+            height: 20px;
+            background: #444;
+            cursor: pointer;
+        }
+        #colorPicker {
+            margin: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>🎨 Pixel Paint</h1>
+    <input type="color" id="colorPicker" value="#ff0000">
+
+    <div id="grid"></div>
+
+    <script>
+        const grid = document.getElementById("grid");
+        const colorPicker = document.getElementById("colorPicker");
+
+        // Criar 32x32 pixels = 1024 pixels
+        for (let i = 0; i < 1024; i++) {
+            const pixel = document.createElement("div");
+            pixel.classList.add("pixel");
+
+            pixel.addEventListener("mousedown", () => {
+                pixel.style.background = colorPicker.value;
+            });
+
+            grid.appendChild(pixel);
+        }
+    </script>
+
+</body>
+</html>
